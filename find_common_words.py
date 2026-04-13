@@ -6,6 +6,7 @@ import whisper
 
 import re
 import string
+import sys
 import os
 
 
@@ -14,12 +15,12 @@ def diarize_audio():
 
     punct_table = str.maketrans('', '', string.punctuation)
 
-    for audio in os.listdir('wav-parser/audio/result'):
+    for audio in os.listdir(audio_path):
         if audio in ('.DS_Store', '.ipynb_checkpoints'): continue
-        if f'{audio}_words.csv' in os.listdir(f'word_diarization'): continue
+        if f'{audio}_words.csv' in os.listdir('word_diarization'): continue
 
         diarization = model.transcribe(
-            f'wav-parser/audio/result/{audio}/{audio}_user.wav',
+            f'{audio_path}/{audio}/{audio}_user.wav',
             language='russian', word_timestamps=True
         )
 
@@ -61,7 +62,7 @@ def find_most_common_words(n_top, min_prob=0.75):
         word_data.word.apply(lambda x: x in most_common_words)
     ].reset_index().drop(columns='index')
 
-    return freq_table[:n_top, 0], word_data
+    return word_data
 
 
 def slice_waveform(waveform, sample_rate, timecodes):
@@ -76,20 +77,20 @@ def slice_waveform(waveform, sample_rate, timecodes):
     return torch.hstack(sliced_waveform)
 
 
-def main():
+def main(audio_path):
     if 'word_diarization' not in os.listdir():
         os.makedirs('word_diarization')
 
-    diarize_audio()
+    diarize_audio(audio_path)
 
-    most_common_words, word_data = find_most_common_words(10)
+    word_data = find_most_common_words(10)
 
     if 'word_audio' not in os.listdir():
         os.makedirs('word_audio')
 
     for audio in word_data.audio.unique():
         waveform, sample_rate = torchaudio.load(
-            f'wav-parser/audio/result/{audio}/{audio}_user.wav'
+            f'{audio_path}/{audio}/{audio}_user.wav'
         )
         timecodes = word_data[word_data.audio == audio][['start', 'end']].values
 
@@ -100,5 +101,6 @@ def main():
         )
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    audio_path = sys.argv[1]
+    main(audio_path)
