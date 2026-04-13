@@ -7,5 +7,5 @@ pip install -r requirements.txt
 
 ## Usage 
 ```
-python find_common_words.py
+python find_common_words.py <audio_path>
 ```
