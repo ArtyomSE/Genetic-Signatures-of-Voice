@@ -7,5 +7,5 @@ pip install -r requirements.txt
 
 ## Usage 
 ```
-python diarize.py
+python find_common_words.py
 ```
