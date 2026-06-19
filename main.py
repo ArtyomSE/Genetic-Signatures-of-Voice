@@ -6,6 +6,7 @@ import whisper
 
 import re
 import os
+import sys
 import string
 from tqdm import tqdm
 
@@ -129,12 +130,7 @@ def make_word_experiment(wav_path, res_path, drz_path, sls_path, min_prob, thres
 
 
 if __name__ == '__main__':
-    wav_path = 'wav-parser/audio/results/'
-    res_path = 'word_approach/'
-    drz_path = 'diarization/'
-    
-    min_prob = 0.5
-    threshold = 40
+    wav_path, res_path, drz_path, min_prob, threshold = sys.argv[1:]
     sls_path = f'wav_sliced_minp={min_prob}_thrs={threshold}/'
     
     make_word_experiment(wav_path, res_path, drz_path, sls_path, min_prob, threshold)
