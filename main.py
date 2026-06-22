@@ -132,5 +132,8 @@ def make_word_experiment(wav_path, res_path, drz_path, sls_path, min_prob, thres
 if __name__ == '__main__':
     wav_path, res_path, drz_path, min_prob, threshold = sys.argv[1:]
     sls_path = f'wav_sliced_minp={min_prob}_thrs={threshold}/'
-    
+
+    min_prob = float(min_prob)
+    threshold = int(threshold)
+
     make_word_experiment(wav_path, res_path, drz_path, sls_path, min_prob, threshold)
