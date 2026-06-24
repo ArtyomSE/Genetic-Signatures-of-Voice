@@ -24,6 +24,7 @@ def diarize_audio(wav_path, out_path, padding=0.15):
     punct_table = str.maketrans('', '', string.punctuation)
 
     for wav_hash in tqdm(listdir(wav_path)):
+        if not os.path.isdir(wav_path + wav_hash): continue
         if wav_hash + '_user.wav' not in os.listdir(wav_path + wav_hash): continue
         if wav_hash + '.csv' in os.listdir(out_path): continue
 
