@@ -60,7 +60,9 @@ def find_most_common_words(drz_path, out_path, min_prob, threshold):
 
     word_data = word_data[word_data.prob > min_prob].drop(columns='prob')
 
-    freq_table = np.vstack(np.unique(word_data['word'].values, return_counts=True)).T
+    word_data = word_data.dropna(subset=['word'])
+
+    freq_table = np.vstack(np.unique(word_data['word'].astype(str).values, return_counts=True)).T
     
     n_wavs = [round(
         100 * word_data[word_data['word'] == word]['audio'].nunique() / word_data['audio'].nunique(), 1
