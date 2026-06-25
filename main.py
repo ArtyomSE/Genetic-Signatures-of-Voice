@@ -10,7 +10,7 @@ import sys
 import string
 from tqdm import tqdm
 
-model = whisper.load_model("large").to('cuda')
+model = whisper.load_model('large').to('cuda')
 
 
 def listdir(dir_path):
